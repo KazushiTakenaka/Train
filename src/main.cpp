@@ -52,10 +52,14 @@ int bukRecevedData = 0;// バックアップ用データ
 struct ReceiveData {
   int slideVal1;
   int slideVal2;
-  int sld_sw1;
-  int sld_sw2;
-  int sld_sw3;
-  int sld_sw4;
+  int sld_sw1_1;
+  int sld_sw1_2;
+  int sld_sw2_1;
+  int sld_sw2_2;
+  int sld_sw3_1;
+  int sld_sw3_2;
+  int sld_sw4_1;
+  int sld_sw4_2;
   int sw1;
   int sw2;
   int sw3;
@@ -99,7 +103,7 @@ void loop() {
         }
 
       /*モータ出力操作、前進後進切替*/
-      if (switchCount >= 0 && switchCount <= 6 || receiveData.sld_sw1 != beforeReceiveData.sld_sw1) {
+      if (switchCount >= 0 && switchCount <= 6 || receiveData.sld_sw1_1 != beforeReceiveData.sld_sw1_1) {
         switchCount++;
         if (switchCount >= 0 && switchCount <= 6) {
           motorStop();       
@@ -108,19 +112,19 @@ void loop() {
         }
         
         
-      }else if (receiveData.sld_sw1 == 0) {
+      }else if (receiveData.sld_sw1_1 == 0) {
         advance(receiveData.slideVal1);
-      }else if (receiveData.sld_sw1 == 1) {
+      }else if (receiveData.sld_sw1_1 == 1) {
         back(receiveData.slideVal1);
       }
       beforeReceiveData = receiveData;
       
       /*ライト操作*/
-      if (receiveData.sw1 == 0 && receiveData.sld_sw2 == 0) {
+      if (receiveData.sw1 == 0 && receiveData.sld_sw2_1 == 0) {
         lightOff();
-      }else if (receiveData.sw1 == 0 || receiveData.sld_sw2 == 0) {
+      }else if (receiveData.sw1 == 0 || receiveData.sld_sw2_1 == 0) {
         lightOn(255);
-      }else if (receiveData.sld_sw2 == 1 && receiveData.sld_sw3 == 0 && receiveData.sld_sw4 == 0){
+      }else if (receiveData.sld_sw2_1 == 1 && receiveData.sld_sw3_1 == 0 && receiveData.sld_sw4_1 == 0){
         lightOn(receiveData.slideVal2);
       }else {
         lightOff();
@@ -134,10 +138,14 @@ void loop() {
       }
       
       #if 1
-      Serial.print(receiveData.sld_sw1);
-      Serial.print(receiveData.sld_sw2);
-      Serial.print(receiveData.sld_sw3);
-      Serial.print(receiveData.sld_sw4);
+      Serial.print(receiveData.sld_sw1_1);
+      Serial.print(receiveData.sld_sw1_2);
+      Serial.print(receiveData.sld_sw2_1);
+      Serial.print(receiveData.sld_sw2_2);
+      Serial.print(receiveData.sld_sw3_1);
+      Serial.print(receiveData.sld_sw3_2);
+      Serial.print(receiveData.sld_sw4_1);
+      Serial.print(receiveData.sld_sw4_2);
       Serial.print(receiveData.sw1);
       Serial.print(receiveData.sw2);
       Serial.print(receiveData.sw3);
