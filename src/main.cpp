@@ -14,6 +14,7 @@ const int IN3 = 16;
 const int IN4 = 17;
 const int BUZZER = 27;
 const int BUTTERY = 35;
+// const int RED_LED = 19;
 
 // アナログ値読み取りピン
 // const int analogPin1 = 13;
@@ -43,6 +44,7 @@ void setup() {
   pinMode(IN3, OUTPUT);
   pinMode(IN4, OUTPUT);
   pinMode(BUZZER, OUTPUT);
+  // pinMode(RED_LED, OUTPUT);
   pinMode(BUTTERY, INPUT);
 }
 
@@ -89,6 +91,7 @@ void loop() {
   停止時はモーターなど停止させる
   通信時はメインプログラム
   */
+  // digitalWrite(RED_LED, HIGH);
   buttry_value = getVoltage();
   if (SerialBT.available()) {
     bytesReceived = SerialBT.readBytes(buffer, sizeof(buffer));
@@ -137,12 +140,11 @@ void loop() {
       }
 
       /*ブザー操作*/
-      if (receiveData.sw2 == 0 || buttry_value <= 3.15) {
+      if (receiveData.sw2 == 0 || buttry_value <= 1.55) {
         buzzerOn();
-      }else{
+      }else {
         buzzerOff();
       }
-      Serial.println(buttry_value);
       #if 0
       Serial.print(receiveData.sld_sw1_1);
       Serial.print(receiveData.sld_sw1_2);
@@ -237,9 +239,15 @@ void buzzerOff() {
 float getVoltage() {
   // ADCで値を読み取る
   int adc_value = analogRead(BUTTERY);
+  const float R1 = 1000;
+  const float R2 = 1000;
 
   // 電圧を計算
-  float voltage = adc_value * (3.3 / 4096);
+  float voltage = adc_value * 3.3 / 4095.0 * (R1 + R2) / R2;
+
+  // Serial.print(adc_value);
+  // Serial.print("  ");
+  Serial.println(voltage);
 
   return voltage;
 }
