@@ -13,7 +13,7 @@ const int IN2 = 26;
 const int IN3 = 16;
 const int IN4 = 17;
 const int BUZZER = 27;
-const int BUTTERY = 35;
+const int BATTERY = 35;
 // const int RED_LED = 19;
 
 // アナログ値読み取りピン
@@ -45,7 +45,7 @@ void setup() {
   pinMode(IN4, OUTPUT);
   pinMode(BUZZER, OUTPUT);
   // pinMode(RED_LED, OUTPUT);
-  pinMode(BUTTERY, INPUT);
+  pinMode(BATTERY, INPUT);
 }
 
 int motorValue = 0;
@@ -82,8 +82,8 @@ int j = 0;
 // 受信データを格納するための構造体作成
 ReceiveData receiveData;
 ReceiveData beforeReceiveData;
-//BUTTRY電圧確認用
-float buttry_value = 0;
+//BATTRY電圧確認用
+float battery_value = 0;
 
 void loop() {
   /*
@@ -92,7 +92,7 @@ void loop() {
   通信時はメインプログラム
   */
   // digitalWrite(RED_LED, HIGH);
-  buttry_value = getVoltage();
+  battery_value = getVoltage();
   if (SerialBT.available()) {
     bytesReceived = SerialBT.readBytes(buffer, sizeof(buffer));
     if (bytesReceived = sizeof(ReceiveData)) {
@@ -139,8 +139,9 @@ void loop() {
         lightOff();
       }
 
-      /*ブザー操作*/
-      if (receiveData.sw2 == 0 || buttry_value <= 1.55) {
+      /*ブザー操作
+      電池の電圧が下がったらブザーが鳴る*/
+      if (receiveData.sw2 == 0 || battery_value <= 1.55) {
         buzzerOn();
       }else {
         buzzerOff();
@@ -238,7 +239,7 @@ void buzzerOff() {
 // 電源電圧を取得する関数
 float getVoltage() {
   // ADCで値を読み取る
-  int adc_value = analogRead(BUTTERY);
+  int adc_value = analogRead(BATTERY);
   const float R1 = 1000;
   const float R2 = 1000;
 
